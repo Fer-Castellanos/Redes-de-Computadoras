@@ -1,0 +1,68 @@
+
+2 VLAN voz y datos
+VLAN en switch
+modo trunk en switch
+
+60 voz
+70 datos
+-------------
+configure terminal
+vlan 60 
+name VOZ
+vlan 70 
+name DATOS
+
+interface range fastEthernet 0/2-11
+switchport voice vlan 60
+interface range fastEthernet 0/2-11
+switchport acces vlan 70
+
+interface fastEthernet 0/24
+switchport mode trunk
+//si me equivoque
+no switchport mode trunk
+interface fastEthernet 0/1
+switchport mode trunk
+do show vlan
+
+
+
+---Sub interfaces logicas en interface fisica
+---En router
+
+show ip interface brief
+configure terminal
+interface fastEthernet 0/1
+no shutdown
+
+interface fastEthernet 0/0.50 //Crea sub interface dentro de la 0/0
+ip address 192.168.60.1 255.255.255.0
+encapsulation dot1q 60
+
+interface fastEthernet 0/0.50
+ip address 192.168.70.1 255.255.255.0
+encapsulation dot1q 70
+no shutdown
+(En privilegiado) show ip interface brief
+
+configure terminal
+ip dhcp pool VOZ
+network 192.168.60.0 255.255.255.0
+default-router 192.168.60.1
+//ip dhcp excluded-address 192.168.60.1 192.168.60.9
+//ip dhcp excluded-address 192.168.60.254
+configure terminal
+ip dhcp pool DATOS
+network 192.168.70.0 255.255.255.0
+default-router 192.168.70.1
+//ip dhcp excluded-address 192.168.70.1 192.168.60.9
+//ip dhcp excluded-address 192.168.70.254
+
+
+
+
+
+
+
+
+
